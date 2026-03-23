@@ -8,11 +8,16 @@ public class PlayerController : MonoBehaviour
 
     private Vector3 startPosition;
     private Rigidbody2D rb;
+    private Animator animator;
     private Vector2 moveInput;
+    private SpriteRenderer spriteRenderer;
+    private float speedMultiplier = 1f;
 
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+        animator = GetComponent<Animator>();
+        spriteRenderer = GetComponent<SpriteRenderer>();
         startPosition = transform.position;
     }
 
@@ -26,15 +31,32 @@ public class PlayerController : MonoBehaviour
         if (!GameManager.Instance.IsGameActive())
         {
             rb.linearVelocity = Vector2.zero;
+            animator.SetBool("isWalking", false);
             return;
         }
 
-        rb.linearVelocity = moveInput.normalized * moveSpeed;
+        rb.linearVelocity = moveInput.normalized * moveSpeed * speedMultiplier;
+
+        if (moveInput.x > 0) spriteRenderer.flipX = false;
+        else if (moveInput.x < 0) spriteRenderer.flipX = true;
+
+        animator.SetBool("isWalking", moveInput.magnitude > 0);
+    }
+
+    public void SetSpeedMultiplier(float multiplier)
+    {
+        speedMultiplier = multiplier;
     }
 
     public void ResetToStart()
     {
         transform.position = startPosition;
         rb.linearVelocity = Vector2.zero;
+        speedMultiplier = 1f;
+    }
+
+    public void PlayDeathAnimation()
+    {
+        animator.SetTrigger("isDead");
     }
 }

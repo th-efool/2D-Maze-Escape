@@ -19,6 +19,7 @@ public class GameManager : MonoBehaviour
     public float restartDelay = 3f;
     private bool restarting = false;
     private float restartTimer = 0f;
+    private bool loadNextScene = false;
 
     [Header("UI")]
     public TextMeshProUGUI timerText;
@@ -44,7 +45,20 @@ public class GameManager : MonoBehaviour
         {
             restartTimer += Time.deltaTime;
             if (restartTimer >= restartDelay)
-                SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+            {
+                if (loadNextScene)
+                {
+                    int nextIndex = SceneManager.GetActiveScene().buildIndex + 1;
+                    // If no next scene exists, go back to MainMenu (index 0)
+                    if (nextIndex >= SceneManager.sceneCountInBuildSettings)
+                        nextIndex = 0;
+                    SceneManager.LoadScene(nextIndex);
+                }
+                else
+                {
+                    SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+                }
+            }
             return;
         }
 
@@ -75,10 +89,11 @@ public class GameManager : MonoBehaviour
     {
         if (!gameActive) return;
         gameActive = false;
+        loadNextScene = true;
 
         int score = Mathf.RoundToInt(timeRemaining * 10);
         Debug.Log("Game Win — Score: " + score);
-        statusText.text = "YOU ESCAPED!\nScore: " + score + "\nRestarting...";
+        statusText.text = "YOU ESCAPED!\nScore: " + score + "\nLoading next level...";
         restarting = true;
     }
 
@@ -86,6 +101,7 @@ public class GameManager : MonoBehaviour
     {
         if (!gameActive) return;
         gameActive = false;
+        loadNextScene = false;
 
         Debug.Log("Game Over — " + reason);
         statusText.text = "GAME OVER\n" + reason + "\nRestarting...";

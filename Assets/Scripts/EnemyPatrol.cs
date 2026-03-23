@@ -35,8 +35,8 @@ public class EnemyPatrol : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            Debug.Log("Game Over — Caught by enemy");
-            other.GetComponent<PlayerController>().ResetToStart();
+            PlayerController player = other.GetComponent<PlayerController>();
+            player.PlayDeathAnimation();
             GameManager.Instance.TriggerLose("Caught by enemy!");
         }
     }
