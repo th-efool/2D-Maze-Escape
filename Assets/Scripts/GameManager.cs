@@ -116,6 +116,6 @@ public class GameManager : MonoBehaviour
             timerText.text = "Time: " + Mathf.CeilToInt(timeRemaining);
 
         if (keysText != null)
-            keysText.text = "Keys: " + collectedKeys + " / " + totalKeys;
+            keysText.text = "Keys: " + collectedKeys*0.5 + " / " + totalKeys;
     }
 }
