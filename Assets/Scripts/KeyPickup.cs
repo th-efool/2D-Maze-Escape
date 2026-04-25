@@ -8,7 +8,14 @@ public class KeyPickup : MonoBehaviour
         {
             GameManager.Instance.CollectKey();
             Debug.Log("Key collected!");
-            gameObject.SetActive(false);
+            GetComponent<SpriteRenderer>().enabled = false;
+            GetComponent<Collider2D>().enabled = false;
+
+
+            var a = GetComponent<AudioSource>();
+            if (a) a.Play();
+            Destroy(gameObject, a ? a.clip.length : 0f);
         }
     }
 }
+ 

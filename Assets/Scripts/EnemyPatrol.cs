@@ -38,6 +38,12 @@ public class EnemyPatrol : MonoBehaviour
             PlayerController player = other.GetComponent<PlayerController>();
             player.PlayDeathAnimation();
             GameManager.Instance.TriggerLose("Caught by enemy!");
+            
+            var a = GetComponent<AudioSource>();
+            if (a) a.Play();
+            foreach (var obj in GameObject.FindGameObjectsWithTag("backgroundmusic"))
+                obj.SetActive(false);
+
         }
     }
 }

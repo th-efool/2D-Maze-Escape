@@ -9,8 +9,15 @@ public class ExitZone : MonoBehaviour
         if (GameManager.Instance.AllKeysCollected())
         {
             Debug.Log("Game Win");
-            other.GetComponent<PlayerController>().ResetToStart();
+            
+            var a = GetComponent<AudioSource>();
+            if (a) a.Play();
+            foreach (var obj in GameObject.FindGameObjectsWithTag("backgroundmusic"))
+                obj.SetActive(false);
+
             GameManager.Instance.TriggerWin();
+            other.GetComponent<PlayerController>().ResetToStart();
+
         }
         else
         {
